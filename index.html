@@ -22,19 +22,66 @@
         <a class="logo" href="#contenuto">
           <span class="logo-segnaposto etichetta">Beatrice<span class="solo-lettori">, torna all’inizio</span></span>
         </a>
-        <!-- PR 2: ancore Collezioni · Marche · Servizi · Dove siamo, pulsante WhatsApp, menu mobile -->
+
+        <nav class="navigazione" aria-label="Principale">
+          <ul class="navigazione__elenco">
+            <li><a href="#collezioni">Collezioni</a></li>
+            <li><a href="#marche">Marche</a></li>
+            <li><a href="#servizi">Servizi</a></li>
+            <li><a href="#dove">Dove siamo</a></li>
+          </ul>
+          <a class="btn btn--primario" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20un%E2%80%99informazione.">Scrivici su WhatsApp</a>
+        </nav>
+
+        <!-- Visibile solo su mobile e solo quando main.js è pronto -->
+        <button class="menu-bottone" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu">Menu</button>
       </div>
     </header>
 
+    <dialog id="menu" class="menu-pannello fondo-avorio" aria-label="Menu">
+      <div class="contenitore menu-pannello__barra">
+        <span class="logo-segnaposto etichetta" aria-hidden="true">Beatrice</span>
+        <button class="menu-bottone menu-bottone--chiudi" type="button" data-menu-chiudi>Chiudi</button>
+      </div>
+      <div class="contenitore menu-pannello__corpo">
+        <nav aria-label="Sezioni della pagina">
+          <ul class="menu-pannello__elenco">
+            <li><a href="#collezioni">Collezioni</a></li>
+            <li><a href="#marche">Marche</a></li>
+            <li><a href="#servizi">Servizi</a></li>
+            <li><a href="#dove">Dove siamo</a></li>
+          </ul>
+        </nav>
+        <div class="menu-pannello__contatti">
+          <p class="etichetta">Contatti</p>
+          <div class="azioni">
+            <a class="btn btn--primario" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20un%E2%80%99informazione.">Scrivici su WhatsApp</a>
+            <a class="btn btn--secondario" href="tel:+3907133856">Chiama 071&nbsp;33856</a>
+          </div>
+          <p class="etichetta">Via di Pietralacroce <span class="da-confermare">[DA CONFERMARE: 17 o 11/A]</span>, Ancona</p>
+        </div>
+      </div>
+    </dialog>
+
     <main id="contenuto" tabindex="-1">
       <!-- 1. Apertura -->
-      <section class="sezione fondo-avorio" aria-labelledby="titolo-apertura">
-        <div class="contenitore">
+      <section class="apertura fondo-avorio" aria-labelledby="titolo-apertura">
+        <div class="contenitore apertura__testo">
           <p class="etichetta">Ancona · Pietralacroce</p>
           <h1 id="titolo-apertura">Intimo, calze e abbigliamento delle migliori marche</h1>
-          <div class="foto-segnaposto foto-segnaposto--apertura" role="img" aria-label="Segnaposto: foto della vetrina">
-            <span class="etichetta">Foto 01 — Vetrina</span>
+          <p class="sottotitolo apertura__sottotitolo">A Pietralacroce, scelti con te: ti aiutiamo a trovare la taglia giusta, con marche che in centro non trovi.</p>
+          <div class="azioni">
+            <a class="btn btn--primario" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20un%E2%80%99informazione.">Scrivici su WhatsApp</a>
+            <a class="btn btn--secondario" href="tel:+3907133856">Chiama 071&nbsp;33856</a>
           </div>
+          <!-- PR 4: lo stato «Aperto ora · chiude alle …» lo calcola main.js dagli orari confermati -->
+          <p class="etichetta apertura__stato">
+            <span>Via di Pietralacroce <span class="da-confermare">[DA CONFERMARE: 17 o 11/A]</span>, Ancona</span>
+            <a href="#dove">Orari <span class="da-confermare">[DA CONFERMARE]</span></a>
+          </p>
+        </div>
+        <div class="foto-segnaposto foto-segnaposto--apertura" role="img" aria-label="Segnaposto: foto della vetrina del negozio">
+          <span class="etichetta">Foto 01 — Vetrina</span>
         </div>
       </section>
 
@@ -42,6 +89,62 @@
       <section id="collezioni" class="sezione fondo-avorio" aria-labelledby="titolo-collezioni">
         <div class="contenitore">
           <h2 id="titolo-collezioni" class="rivela">Cosa trovi</h2>
+          <ol class="griglia schede">
+            <li class="scheda rivela">
+              <div class="foto-segnaposto" role="img" aria-label="Segnaposto: foto della categoria intimo"><span class="etichetta">Foto 02 — Intimo</span></div>
+              <div class="scheda__testo">
+                <p class="etichetta indice" aria-hidden="true">01</p>
+                <h3 class="scheda__titolo">Intimo</h3>
+                <p>Reggiseni, slip e coordinati, con la misura provata insieme a te.</p>
+                <a class="link-azione" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20informazioni%20su%3A%20Intimo">Chiedi disponibilità<span class="solo-lettori">: intimo</span></a>
+              </div>
+            </li>
+            <li class="scheda rivela">
+              <div class="foto-segnaposto" role="img" aria-label="Segnaposto: foto della categoria calze e collant"><span class="etichetta">Foto 03 — Calze e collant</span></div>
+              <div class="scheda__testo">
+                <p class="etichetta indice" aria-hidden="true">02</p>
+                <h3 class="scheda__titolo">Calze e collant</h3>
+                <p>Collant velati e coprenti, calze e calzini per ogni stagione.</p>
+                <a class="link-azione" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20informazioni%20su%3A%20Calze%20e%20collant">Chiedi disponibilità<span class="solo-lettori">: calze e collant</span></a>
+              </div>
+            </li>
+            <li class="scheda rivela">
+              <div class="foto-segnaposto" role="img" aria-label="Segnaposto: foto della categoria pigiami e homewear"><span class="etichetta">Foto 04 — Pigiami e homewear</span></div>
+              <div class="scheda__testo">
+                <p class="etichetta indice" aria-hidden="true">03</p>
+                <h3 class="scheda__titolo">Pigiami e homewear</h3>
+                <p>Pigiami, camicie da notte e capi comodi per stare in casa.</p>
+                <a class="link-azione" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20informazioni%20su%3A%20Pigiami%20e%20homewear">Chiedi disponibilità<span class="solo-lettori">: pigiami e homewear</span></a>
+              </div>
+            </li>
+            <li class="scheda rivela">
+              <div class="foto-segnaposto" role="img" aria-label="Segnaposto: foto della categoria abbigliamento"><span class="etichetta">Foto 05 — Abbigliamento</span></div>
+              <div class="scheda__testo">
+                <p class="etichetta indice" aria-hidden="true">04</p>
+                <h3 class="scheda__titolo">Abbigliamento</h3>
+                <p>Maglieria e capi da indossare ogni giorno, da provare con calma.</p>
+                <a class="link-azione" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20informazioni%20su%3A%20Abbigliamento">Chiedi disponibilità<span class="solo-lettori">: abbigliamento</span></a>
+              </div>
+            </li>
+            <li class="scheda rivela">
+              <div class="foto-segnaposto" role="img" aria-label="Segnaposto: foto della categoria moda mare"><span class="etichetta">Foto 06 — Moda mare</span></div>
+              <div class="scheda__testo">
+                <p class="etichetta indice" aria-hidden="true">05</p>
+                <h3 class="scheda__titolo">Moda mare</h3>
+                <p>Costumi interi e bikini, da scegliere prima che arrivi l’estate.</p>
+                <a class="link-azione" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20informazioni%20su%3A%20Moda%20mare">Chiedi disponibilità<span class="solo-lettori">: moda mare</span></a>
+              </div>
+            </li>
+            <li class="scheda rivela">
+              <div class="foto-segnaposto" role="img" aria-label="Segnaposto: foto della categoria accessori"><span class="etichetta">Foto 07 — Accessori</span></div>
+              <div class="scheda__testo">
+                <p class="etichetta indice" aria-hidden="true">06</p>
+                <h3 class="scheda__titolo">Accessori</h3>
+                <p><span class="da-confermare">[DA CONFERMARE: quali accessori]</span></p>
+                <a class="link-azione" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20informazioni%20su%3A%20Accessori">Chiedi disponibilità<span class="solo-lettori">: accessori</span></a>
+              </div>
+            </li>
+          </ol>
         </div>
       </section>
 
@@ -49,6 +152,47 @@
       <section id="marche" class="sezione fondo-bruno" aria-labelledby="titolo-marche">
         <div class="contenitore">
           <h2 id="titolo-marche" class="rivela">Le marche</h2>
+          <p class="etichetta"><span class="da-confermare">[DA CONFERMARE: grafie dei marchi e gruppi Intimo e homewear · Calze · Mare · Abbigliamento]</span></p>
+          <div class="marche">
+            <div class="marche__gruppo">
+              <h3 class="etichetta">Intimo e homewear</h3>
+              <ul class="righe marche__elenco">
+                <li class="display display--riga">Caliban</li>
+                <li class="display display--riga">Hanro</li>
+                <li class="display display--riga">Karma</li>
+                <li class="display display--riga">noir’n’bleu</li>
+                <li class="display display--riga">Perofil</li>
+                <li class="display display--riga">Promise</li>
+                <li class="display display--riga">Selmark</li>
+                <li class="display display--riga">Simoncini</li>
+                <li class="display display--riga">Verdissima</li>
+              </ul>
+            </div>
+            <div class="marche__gruppo">
+              <h3 class="etichetta">Calze</h3>
+              <ul class="righe marche__elenco">
+                <li class="display display--riga">Oroblù</li>
+                <li class="display display--riga">Ragno</li>
+              </ul>
+            </div>
+            <div class="marche__gruppo">
+              <h3 class="etichetta">Mare</h3>
+              <ul class="righe marche__elenco">
+                <li class="display display--riga">Banana Moon</li>
+              </ul>
+            </div>
+            <div class="marche__gruppo">
+              <h3 class="etichetta">Abbigliamento</h3>
+              <ul class="righe marche__elenco">
+                <li class="display display--riga">19.70 Seventy</li>
+                <li class="display display--riga">Liu Jo</li>
+                <li class="display display--riga">M-M by MaxMara</li>
+                <li class="display display--riga">Rino&amp;Pelle est.&nbsp;1987</li>
+                <li class="display display--riga">solocascmir</li>
+              </ul>
+            </div>
+          </div>
+          <p class="sottotitolo">E molte altre, in negozio.</p>
         </div>
       </section>
 
@@ -56,20 +200,78 @@
       <section id="servizi" class="sezione fondo-avorio" aria-labelledby="titolo-servizi">
         <div class="contenitore">
           <h2 id="titolo-servizi" class="rivela">Servizi</h2>
+          <ol class="righe servizi">
+            <li class="servizio rivela">
+              <p class="etichetta indice" aria-hidden="true">01</p>
+              <h3>Consulenza taglia</h3>
+              <p>Ti aiutiamo a trovare la misura giusta, soprattutto per reggiseni e collant.</p>
+            </li>
+            <li class="servizio rivela">
+              <p class="etichetta indice" aria-hidden="true">02</p>
+              <h3>Te lo teniamo da parte</h3>
+              <p>Scrivici su WhatsApp: teniamo il capo per te fino a sabato.</p>
+            </li>
+            <li class="servizio rivela">
+              <p class="etichetta indice" aria-hidden="true">03</p>
+              <h3>Confezione regalo</h3>
+              <p>Gratuita, già pronta da portare via.</p>
+            </li>
+            <li class="servizio rivela">
+              <p class="etichetta indice" aria-hidden="true">04</p>
+              <h3>Lista dei desideri</h3>
+              <p>Lascia i capi che ti piacciono: chi ti fa il regalo li trova già scelti.</p>
+            </li>
+            <li class="servizio rivela">
+              <p class="etichetta indice" aria-hidden="true">05</p>
+              <h3>Cambio con scontrino regalo</h3>
+              <p><span class="da-confermare">[DA CONFERMARE: condizioni e tempi]</span>.</p>
+            </li>
+          </ol>
         </div>
       </section>
 
       <!-- 5. Beatrice -->
       <section class="sezione fondo-bruno" aria-labelledby="titolo-beatrice">
-        <div class="contenitore">
-          <h2 id="titolo-beatrice" class="rivela">Beatrice</h2>
+        <div class="contenitore beatrice">
+          <div class="foto-segnaposto beatrice__foto" role="img" aria-label="Segnaposto: ritratto di Beatrice al banco del negozio">
+            <span class="etichetta">Foto 08 — Beatrice al banco</span>
+          </div>
+          <div class="beatrice__testo">
+            <h2 id="titolo-beatrice" class="rivela">Beatrice</h2>
+            <p><span class="da-confermare">[DA SCRIVERE CON LEI: 2–3 frasi]</span></p>
+          </div>
         </div>
       </section>
 
-      <!-- 6. Dicono di noi -->
+      <!-- 6. Dicono di noi — solo recensioni vere, copiate da Google e Facebook -->
       <section class="sezione fondo-avorio" aria-labelledby="titolo-recensioni">
         <div class="contenitore">
           <h2 id="titolo-recensioni" class="rivela">Dicono di noi</h2>
+          <ul class="griglia recensioni">
+            <li>
+              <figure class="recensione">
+                <blockquote><p><span class="da-confermare">[DA COPIARE: recensione vera da Google o Facebook]</span></p></blockquote>
+                <figcaption class="etichetta"><span class="da-confermare">[Nome come appare sulla piattaforma]</span> · <span class="da-confermare">[Fonte]</span></figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure class="recensione">
+                <blockquote><p><span class="da-confermare">[DA COPIARE: recensione vera da Google o Facebook]</span></p></blockquote>
+                <figcaption class="etichetta"><span class="da-confermare">[Nome come appare sulla piattaforma]</span> · <span class="da-confermare">[Fonte]</span></figcaption>
+              </figure>
+            </li>
+            <li>
+              <figure class="recensione">
+                <blockquote><p><span class="da-confermare">[DA COPIARE: recensione vera da Google o Facebook]</span></p></blockquote>
+                <figcaption class="etichetta"><span class="da-confermare">[Nome come appare sulla piattaforma]</span> · <span class="da-confermare">[Fonte]</span></figcaption>
+              </figure>
+            </li>
+          </ul>
+          <!-- Quando ci sono i link veri diventano <a>: «Leggi tutte le recensioni» (scheda Google) e «Lascia una recensione» (link breve di Google) -->
+          <ul class="collegamenti">
+            <li>Leggi tutte le recensioni <span class="da-confermare">[DA CONFERMARE: link alla scheda Google]</span></li>
+            <li>Lascia una recensione <span class="da-confermare">[DA CONFERMARE: link breve di Google]</span></li>
+          </ul>
         </div>
       </section>
 
@@ -77,6 +279,39 @@
       <section id="dove" class="sezione fondo-bruno" aria-labelledby="titolo-dove">
         <div class="contenitore">
           <h2 id="titolo-dove" class="rivela">Dove siamo</h2>
+          <div class="dove">
+            <div class="dove__info">
+              <address class="dove__indirizzo">
+                Beatrice<br>
+                Via di Pietralacroce <span class="da-confermare">[DA CONFERMARE: 17 o 11/A]</span><br>
+                Ancona<br>
+                <a href="tel:+3907133856">071&nbsp;33856</a>
+              </address>
+              <table class="orari">
+                <caption class="etichetta">Orari</caption>
+                <tbody>
+                  <tr data-giorno="Mon"><th scope="row">Lunedì</th><td><span class="da-confermare">[DA CONFERMARE]</span></td></tr>
+                  <tr data-giorno="Tue"><th scope="row">Martedì</th><td><span class="da-confermare">[DA CONFERMARE]</span></td></tr>
+                  <tr data-giorno="Wed"><th scope="row">Mercoledì</th><td><span class="da-confermare">[DA CONFERMARE]</span></td></tr>
+                  <tr data-giorno="Thu"><th scope="row">Giovedì</th><td><span class="da-confermare">[DA CONFERMARE]</span></td></tr>
+                  <tr data-giorno="Fri"><th scope="row">Venerdì</th><td><span class="da-confermare">[DA CONFERMARE]</span></td></tr>
+                  <tr data-giorno="Sat"><th scope="row">Sabato</th><td><span class="da-confermare">[DA CONFERMARE]</span></td></tr>
+                  <tr data-giorno="Sun"><th scope="row">Domenica</th><td><span class="da-confermare">[DA CONFERMARE]</span></td></tr>
+                </tbody>
+              </table>
+              <p><span class="da-confermare">[DA CONFERMARE: orari di dicembre e chiusure per ferie]</span></p>
+            </div>
+            <div class="dove__mappa">
+              <!-- PR 3: immagine statica della zona. Mai l’iframe di Google Maps -->
+              <div class="foto-segnaposto foto-segnaposto--mappa" role="img" aria-label="Segnaposto: mappa della zona di Pietralacroce">
+                <span class="etichetta">Mappa — zona di Pietralacroce</span>
+              </div>
+              <div class="azioni">
+                <a class="btn btn--primario" href="https://www.google.com/maps/dir/?api=1&amp;destination=Beatrice%2C%20Via%20di%20Pietralacroce%2C%20Ancona">Indicazioni</a>
+                <a class="link-azione" href="https://www.google.com/maps/search/?api=1&amp;query=Beatrice%2C%20Via%20di%20Pietralacroce%2C%20Ancona">Apri in Google Maps</a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -84,15 +319,35 @@
       <section class="sezione fondo-avorio" aria-labelledby="titolo-chiusura">
         <div class="contenitore">
           <h2 id="titolo-chiusura" class="rivela">Passa a trovarci o scrivici</h2>
+          <div class="azioni">
+            <a class="btn btn--primario" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20un%E2%80%99informazione.">Scrivici su WhatsApp</a>
+            <a class="btn btn--secondario" href="tel:+3907133856">Chiama 071&nbsp;33856</a>
+          </div>
         </div>
       </section>
     </main>
 
+    <!-- 9. Footer -->
     <footer class="footer fondo-profondo">
-      <div class="contenitore">
-        <span class="logo-segnaposto etichetta">Beatrice</span>
-        <!-- PR 2: Instagram @beatrice_totalook, Facebook, telefono, dati fiscali, Privacy -->
+      <div class="contenitore footer__griglia">
+        <div class="footer__marchio">
+          <span class="logo-segnaposto etichetta">Beatrice</span>
+          <p>Intimo, calze e abbigliamento donna a Pietralacroce, Ancona.</p>
+        </div>
+        <ul class="footer__elenco">
+          <li><a href="https://www.instagram.com/beatrice_totalook/">Instagram @beatrice_totalook</a></li>
+          <li><a href="https://www.facebook.com/BeatriceTotalookAncona">Facebook</a></li>
+          <li><a href="tel:+3907133856">071&nbsp;33856</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+        </ul>
+        <p class="footer__legale"><span class="da-confermare">[DA CONFERMARE: ragione sociale · P.&nbsp;IVA · anno di apertura]</span></p>
       </div>
     </footer>
+
+    <!-- Barra fissa, solo su mobile -->
+    <nav class="barra-cta fondo-profondo" aria-label="Contatti rapidi">
+      <a class="btn btn--primario" href="https://wa.me/3907133856?text=Ciao%20Beatrice%2C%20vorrei%20un%E2%80%99informazione.">WhatsApp</a>
+      <a class="btn btn--secondario" href="tel:+3907133856">Chiama</a>
+    </nav>
   </body>
 </html>
