@@ -1,0 +1,540 @@
+/* ==========================================================================
+   Beatrice — foglio di stile
+   Ordine: font · token · reset · base · tipografia · superfici · struttura ·
+   componenti · movimento · utilità
+   ========================================================================== */
+
+/* --- Font self-hosted (subset latin, woff2) ------------------------------ */
+
+@font-face {
+  font-family: "Archivo";
+  src: url("../fonts/archivo-latin-var.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Mono";
+  src: url("../fonts/space-mono-latin-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* --- Token --------------------------------------------------------------- */
+/* Solo questi sei colori. Contrasti misurati (WCAG 2.x):
+   avorio su bruno 4,99:1 · crema su bruno-profondo 8,99:1 ·
+   inchiostro su avorio 14,78:1 · bordeaux su avorio 8,47:1 ·
+   crema su bruno 4,31:1 (sotto soglia: la crema non è mai testo) ·
+   bordeaux su bruno 1,70:1 (il bordeaux non va mai su bruno). */
+
+:root {
+  --avorio: #f4efe6;
+  --bruno: #736545;
+  --bruno-profondo: #3e3626;
+  --crema: #e6dfd0;
+  --inchiostro: #211c13;
+  --bordeaux: #7a2733;
+
+  /* Filetti: inchiostro al 15% su avorio, crema al 35% su bruno */
+  --filetto-chiaro: rgb(33 28 19 / 0.15);
+  --filetto-scuro: rgb(230 223 208 / 0.35);
+
+  --font-testo: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --margine: clamp(1rem, 4vw, 3rem);
+  --larghezza-max: 90rem;
+  --misura: 62ch;
+  --altezza-intestazione: 4rem;
+
+  --curva: cubic-bezier(0.16, 1, 0.3, 1);
+  --durata: 0.6s;
+
+  /* Grana: rumore SVG già al 4% di opacità, solo sui fondi pieni */
+  --grana: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* --- Reset essenziale ---------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  border-radius: 0;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* --- Base ---------------------------------------------------------------- */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  background-color: var(--avorio);
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--avorio);
+  color: var(--inchiostro);
+  font-family: var(--font-testo);
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  font-stretch: 100%;
+  line-height: 1.6;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+a,
+button,
+summary,
+label,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* Le ancore non finiscono sotto l'intestazione fissa */
+[id] {
+  scroll-margin-top: calc(var(--altezza-intestazione) + 1.5rem);
+}
+
+/* Focus: 2px, scostamento 3px; il colore dipende dalla superficie */
+:focus-visible {
+  outline: 2px solid var(--focus, var(--bordeaux));
+  outline-offset: 3px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+::selection {
+  background-color: var(--bordeaux);
+  color: var(--avorio);
+}
+
+/* --- Tipografia ---------------------------------------------------------- */
+
+.display,
+h1,
+h2 {
+  font-family: var(--font-testo);
+  font-weight: 800;
+  font-stretch: 75%;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+  font-size: clamp(2.5rem, 9vw, 6.5rem);
+  text-wrap: balance;
+}
+
+/* Righe a manifesto (elenco marche): stesso stile, più piccolo */
+.display--riga {
+  font-size: clamp(1.75rem, 6vw, 3.5rem);
+}
+
+h3,
+.sottotitolo {
+  font-family: var(--font-testo);
+  font-weight: 700;
+  font-stretch: 87%;
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  line-height: 1.2;
+  text-transform: none;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+p,
+.testo {
+  max-width: var(--misura);
+  text-wrap: pretty;
+}
+
+/* Etichette, indici, orari, didascalie, prezzi */
+.etichetta {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+}
+
+.indice {
+  color: var(--bordeaux);
+}
+
+/* --- Superfici ----------------------------------------------------------- */
+/* Due fondi alternati (avorio, bruno) + bruno profondo per footer e barra. */
+
+.fondo-avorio {
+  --focus: var(--bordeaux);
+  --filetto: var(--filetto-chiaro);
+  background-color: var(--avorio);
+  background-image: var(--grana);
+  color: var(--inchiostro);
+}
+
+.fondo-bruno {
+  --focus: var(--avorio);
+  --filetto: var(--filetto-scuro);
+  background-color: var(--bruno);
+  background-image: var(--grana);
+  color: var(--avorio);
+}
+
+/* Su bruno il testo è sempre avorio e mai sotto i 18px */
+.fondo-bruno .etichetta {
+  font-size: 1.125rem;
+  letter-spacing: 0.12em;
+}
+
+.fondo-profondo {
+  --focus: var(--avorio);
+  --filetto: var(--filetto-scuro);
+  background-color: var(--bruno-profondo);
+  background-image: var(--grana);
+  color: var(--avorio);
+}
+
+/* --- Struttura ----------------------------------------------------------- */
+
+.contenitore {
+  width: 100%;
+  max-width: var(--larghezza-max);
+  margin-inline: auto;
+  padding-inline: var(--margine);
+}
+
+.sezione {
+  padding-block: clamp(3.5rem, 10vw, 8rem);
+}
+
+.sezione > .contenitore > * + * {
+  margin-top: 1.5rem;
+}
+
+.filetto {
+  border: 0;
+  border-top: 1px solid var(--filetto);
+}
+
+/* Righe separate da filetti (marche, servizi, orari) */
+.righe > * {
+  border-top: 1px solid var(--filetto);
+}
+
+.righe > :last-child {
+  border-bottom: 1px solid var(--filetto);
+}
+
+/* Griglia foto: fughe di 1px nel colore del filetto */
+.griglia {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background-color: var(--filetto);
+  border: 1px solid var(--filetto);
+}
+
+.griglia > * {
+  background-color: var(--avorio);
+}
+
+@media (min-width: 768px) {
+  .griglia {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .griglia {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- Salta al contenuto -------------------------------------------------- */
+
+.salta {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  background-color: var(--bordeaux);
+  color: var(--avorio);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.salta:focus-visible,
+.salta:focus {
+  transform: none;
+  outline: 2px solid var(--bordeaux);
+  outline-offset: 3px;
+}
+
+/* --- Intestazione -------------------------------------------------------- */
+
+.intestazione {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  border-bottom: 1px solid var(--filetto);
+}
+
+.intestazione__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: var(--altezza-intestazione);
+}
+
+main {
+  padding-top: var(--altezza-intestazione);
+}
+
+/* --- Logo ---------------------------------------------------------------- */
+/* Il logo è solo l'SVG originale. Finché manca: segnaposto, mai un corsivo. */
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  min-width: 48px;
+  text-decoration: none;
+}
+
+.logo-segnaposto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--bruno);
+  color: var(--avorio);
+  border: 1px solid var(--crema);
+  font-size: 1.125rem; /* testo su bruno: almeno 18px */
+}
+
+.logo:hover .logo-segnaposto,
+.logo:active .logo-segnaposto {
+  background-color: var(--bruno-profondo);
+}
+
+/* --- Pulsanti ------------------------------------------------------------ */
+/* Hover e active sono sempre più contrastati del riposo. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid currentColor;
+  font-family: var(--font-testo);
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-stretch: 87%;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--curva),
+    color 0.2s var(--curva),
+    border-color 0.2s var(--curva);
+}
+
+/* Su avorio: primario bordeaux, secondario a filo */
+.btn--primario {
+  background-color: var(--bordeaux);
+  border-color: var(--bordeaux);
+  color: var(--avorio);
+}
+
+.btn--primario:hover,
+.btn--primario:active {
+  background-color: var(--inchiostro);
+  border-color: var(--inchiostro);
+}
+
+.btn--secondario {
+  background-color: transparent;
+  border-color: var(--inchiostro);
+  color: var(--inchiostro);
+}
+
+.btn--secondario:hover,
+.btn--secondario:active {
+  background-color: var(--inchiostro);
+  color: var(--avorio);
+}
+
+/* Su bruno: il primario si inverte (fondo avorio, testo inchiostro) */
+.fondo-bruno .btn--primario,
+.fondo-profondo .btn--primario {
+  background-color: var(--avorio);
+  border-color: var(--avorio);
+  color: var(--inchiostro);
+}
+
+.fondo-bruno .btn--primario:hover,
+.fondo-bruno .btn--primario:active,
+.fondo-profondo .btn--primario:hover,
+.fondo-profondo .btn--primario:active {
+  background-color: var(--inchiostro);
+  border-color: var(--avorio);
+  color: var(--avorio);
+}
+
+.fondo-bruno .btn--secondario,
+.fondo-profondo .btn--secondario {
+  border-color: var(--avorio);
+  color: var(--avorio);
+}
+
+.fondo-bruno .btn--secondario:hover,
+.fondo-bruno .btn--secondario:active,
+.fondo-profondo .btn--secondario:hover,
+.fondo-profondo .btn--secondario:active {
+  background-color: var(--avorio);
+  color: var(--inchiostro);
+}
+
+.azioni {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* --- Segnaposto ---------------------------------------------------------- */
+/* Foto mancanti: blocco crema pieno con etichetta. Mai immagini stock. */
+
+.foto-segnaposto {
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 4 / 5;
+  padding: 1rem;
+  background-color: var(--crema);
+  color: var(--inchiostro);
+}
+
+.foto-segnaposto--apertura {
+  aspect-ratio: 4 / 5;
+}
+
+@media (min-width: 768px) {
+  .foto-segnaposto--apertura {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* Dati da confermare: visibili di proposito */
+.da-confermare {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  outline: 1px dashed currentColor;
+  outline-offset: 2px;
+}
+
+.fondo-bruno .da-confermare,
+.fondo-profondo .da-confermare {
+  font-size: 1.125rem;
+}
+
+/* --- Footer -------------------------------------------------------------- */
+
+.footer {
+  padding-block: 3rem calc(3rem + env(safe-area-inset-bottom));
+}
+
+/* --- Movimento ----------------------------------------------------------- */
+/* Unica animazione: comparsa una volta per elemento. Solo opacity e transform.
+   La classe .js la mette main.js: senza JavaScript nulla resta nascosto. */
+
+.js .rivela {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity var(--durata) var(--curva),
+    transform var(--durata) var(--curva);
+}
+
+.js .rivela.visibile {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .rivela {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn {
+    transition: none;
+  }
+}
+
+/* --- Utilità ------------------------------------------------------------- */
+
+.solo-lettori {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
