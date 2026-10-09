@@ -18,16 +18,24 @@
   if (bottoneMenu && pannello && typeof pannello.showModal === "function") {
     var desktop = window.matchMedia("(min-width: 64em)");
 
+    var apertoAlle = 0;
+
     var chiudiMenu = function () {
       if (pannello.open) pannello.close();
     };
 
     bottoneMenu.addEventListener("click", function () {
+      apertoAlle = Date.now();
       pannello.showModal();
       bottoneMenu.setAttribute("aria-expanded", "true");
     });
 
-    pannello.querySelector("[data-menu-chiudi]").addEventListener("click", chiudiMenu);
+    // «Chiudi» sta dove c'era «Menu»: un doppio tocco aprirebbe e chiuderebbe
+    // subito il pannello, quindi i tocchi nel primo mezzo secondo si ignorano
+    pannello.querySelector("[data-menu-chiudi]").addEventListener("click", function () {
+      if (Date.now() - apertoAlle < 500) return;
+      chiudiMenu();
+    });
 
     pannello.addEventListener("close", function () {
       bottoneMenu.setAttribute("aria-expanded", "false");
@@ -39,7 +47,9 @@
       var elementi = pannello.querySelectorAll("a[href], button:not([disabled])");
       var primo = elementi[0];
       var ultimo = elementi[elementi.length - 1];
-      if (evento.shiftKey && document.activeElement === primo) {
+      // Anche dal pannello stesso (dopo un clic su una zona vuota)
+      var suPrimo = document.activeElement === primo || document.activeElement === pannello;
+      if (evento.shiftKey && suPrimo) {
         evento.preventDefault();
         ultimo.focus();
       } else if (!evento.shiftKey && document.activeElement === ultimo) {
@@ -50,6 +60,8 @@
 
     // Scelta una sezione: chiude il pannello e porta lì scorrimento e focus
     pannello.addEventListener("click", function (evento) {
+      // Ctrl/Cmd/Maiusc+clic e clic centrale restano al browser (nuova scheda)
+      if (evento.button !== 0 || evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey) return;
       var link = evento.target.closest('a[href^="#"]');
       if (!link) return;
       var ancora = link.getAttribute("href");
@@ -57,7 +69,7 @@
       if (!destinazione) return;
       evento.preventDefault();
       chiudiMenu();
-      history.pushState(null, "", ancora);
+      if (location.hash !== ancora) history.pushState(null, "", ancora);
       // Il focus va sul titolo della sezione, così Tab riparte da lì
       var titolo = destinazione.querySelector("h2") || destinazione;
       titolo.setAttribute("tabindex", "-1");
@@ -74,25 +86,52 @@
   }
 
   /* --- Giorno corrente negli orari ---------------------------------------- */
-  /* Il giorno si calcola nel fuso di Ancona, non in quello del telefono. */
+  /* Il giorno si calcola nel fuso di Ancona, non in quello del telefono.
+     Si ricalcola quando la scheda torna visibile: una pagina lasciata aperta
+     di notte non resta ferma a ieri. */
 
-  try {
-    var oggi = new Intl.DateTimeFormat("en-US", {
-      weekday: "short",
-      timeZone: "Europe/Rome"
-    }).format(new Date());
-    var riga = document.querySelector('.orari [data-giorno="' + oggi + '"]');
-    if (riga) {
-      riga.classList.add("oggi");
-      riga.setAttribute("aria-current", "date");
-      var etichetta = document.createElement("span");
-      etichetta.className = "etichetta oggi-etichetta";
-      etichetta.textContent = "Oggi";
-      riga.querySelector("th").appendChild(etichetta);
+  var segnaOggi = function () {
+    var oggi;
+    try {
+      oggi = new Intl.DateTimeFormat("en-US", {
+        weekday: "short",
+        timeZone: "Europe/Rome"
+      }).format(new Date());
+    } catch (errore) {
+      return; // Browser senza supporto ai fusi orari: la tabella resta com'è
     }
-  } catch (errore) {
-    // Browser senza supporto ai fusi orari: la tabella resta com'è
-  }
+
+    var precedente = document.querySelector(".orari .oggi");
+    if (precedente) {
+      if (precedente.getAttribute("data-giorno") === oggi) return;
+      precedente.classList.remove("oggi");
+      precedente.removeAttribute("aria-current");
+      var vecchia = precedente.querySelector(".oggi-etichetta");
+      if (vecchia) vecchia.parentNode.removeChild(vecchia);
+      precedente.querySelector("th").normalize();
+      var nome = precedente.querySelector("th").firstChild;
+      if (nome) nome.nodeValue = nome.nodeValue.replace(/\s+$/, "");
+    }
+
+    var riga = document.querySelector('.orari [data-giorno="' + oggi + '"]');
+    if (!riga) return;
+    riga.classList.add("oggi");
+    riga.setAttribute("aria-current", "date");
+    var etichetta = document.createElement("span");
+    etichetta.className = "etichetta oggi-etichetta";
+    etichetta.textContent = "Oggi";
+    // Lo spazio separa le parole per i lettori di schermo («Venerdì Oggi»)
+    // e permette alla riga di andare a capo sugli schermi stretti
+    var th = riga.querySelector("th");
+    th.appendChild(document.createTextNode(" "));
+    th.appendChild(etichetta);
+  };
+
+  segnaOggi();
+  window.addEventListener("pageshow", segnaOggi);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") segnaOggi();
+  });
 
   /* --- Comparsa degli elementi ------------------------------------------- */
   /* Una sola volta per elemento. Con movimento ridotto o senza

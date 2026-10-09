@@ -101,8 +101,8 @@ html {
   background-color: var(--avorio);
   /* Lo scorrimento (ancore e focus da tastiera) tiene conto dell'intestazione
      fissa in alto e, su mobile, della barra fissa in basso */
-  scroll-padding-top: var(--altezza-intestazione);
-  scroll-padding-bottom: var(--spazio-barra);
+  scroll-padding-top: calc(var(--altezza-intestazione) + 1px + 0.5rem);
+  scroll-padding-bottom: calc(var(--spazio-barra) + 0.5rem);
 }
 
 body {
@@ -126,6 +126,7 @@ input,
 select,
 textarea {
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -134,10 +135,15 @@ a {
   text-underline-offset: 0.2em;
 }
 
+a:hover,
+a:active {
+  text-decoration-thickness: 3px;
+}
+
 /* Le ancore non finiscono sotto l'intestazione fissa: si somma a
    scroll-padding-top di html, quindi qui basta il respiro sopra il titolo */
 [id] {
-  scroll-margin-top: 1.5rem;
+  scroll-margin-top: 1rem;
 }
 
 /* Focus: 2px, scostamento 3px; il colore dipende dalla superficie */
@@ -160,6 +166,12 @@ a {
   color: var(--avorio);
 }
 
+.fondo-bruno ::selection,
+.fondo-profondo ::selection {
+  background-color: var(--avorio);
+  color: var(--inchiostro);
+}
+
 /* --- Tipografia ---------------------------------------------------------- */
 
 .display,
@@ -173,6 +185,9 @@ h2 {
   line-height: 0.95;
   font-size: clamp(2.5rem, 9vw, 6.5rem);
   text-wrap: balance;
+  /* Con il testo di sistema ingrandito una parola lunga («abbigliamento»)
+     può superare lo schermo: meglio spezzarla che scorrere di lato */
+  overflow-wrap: break-word;
 }
 
 /* Righe a manifesto (elenco marche): stesso stile, più piccolo */
@@ -190,6 +205,7 @@ h3,
   text-transform: none;
   letter-spacing: 0;
   text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 p,
@@ -238,6 +254,11 @@ p,
   letter-spacing: 0.12em;
 }
 
+/* …tranne dentro i segnaposto foto, che hanno fondo crema e testo inchiostro */
+.fondo-bruno .foto-segnaposto .etichetta {
+  font-size: 0.8125rem;
+}
+
 .fondo-profondo {
   --focus: var(--avorio);
   --filetto: var(--filetto-scuro);
@@ -252,7 +273,8 @@ p,
   width: 100%;
   max-width: var(--larghezza-max);
   margin-inline: auto;
-  padding-inline: var(--margine);
+  padding-inline: max(var(--margine), env(safe-area-inset-left))
+    max(var(--margine), env(safe-area-inset-right));
 }
 
 .sezione {
@@ -280,9 +302,10 @@ p,
 /* Griglia foto: fughe di 1px nel colore del filetto */
 .griglia {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1px;
   background-color: var(--filetto);
+  background-clip: padding-box;
   border: 1px solid var(--filetto);
 }
 
@@ -292,13 +315,13 @@ p,
 
 @media (min-width: 768px) {
   .griglia {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1200px) {
   .griglia {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -368,7 +391,9 @@ main {
   background-color: var(--bruno);
   color: var(--avorio);
   border: 1px solid var(--crema);
-  font-size: 1.125rem; /* testo su bruno: almeno 18px */
+  /* Testo su bruno: almeno 18px, ma non cresce oltre col testo ingrandito
+     (è un segnaposto: l’SVG del logo avrà una dimensione fissa) */
+  font-size: clamp(18px, 5vw, 1.125rem);
 }
 
 .logo:hover .logo-segnaposto,
@@ -395,10 +420,6 @@ main {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  transition:
-    background-color 0.2s var(--curva),
-    color 0.2s var(--curva),
-    border-color 0.2s var(--curva);
 }
 
 /* Su avorio: primario bordeaux, secondario a filo */
@@ -438,9 +459,9 @@ main {
 .fondo-bruno .btn--primario:active,
 .fondo-profondo .btn--primario:hover,
 .fondo-profondo .btn--primario:active {
-  background-color: var(--inchiostro);
-  border-color: var(--avorio);
-  color: var(--avorio);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
 }
 
 .fondo-bruno .btn--secondario,
@@ -497,6 +518,7 @@ main {
   text-transform: none;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+  overflow-wrap: anywhere;
 }
 
 .fondo-bruno .da-confermare,
@@ -505,16 +527,9 @@ main {
 }
 
 /* --- Pagina con barra fissa ---------------------------------------------- */
-/* Su mobile la barra in basso occupa spazio: il fondo pagina resta visibile. */
-
-body {
-  padding-bottom: var(--spazio-barra);
-}
-
-/* Pagine senza barra fissa (privacy, 404) */
-body.pagina-semplice {
-  padding-bottom: 0;
-}
+/* La barra in basso è sticky ed è l'ultimo elemento del body: in fondo alla
+   pagina si appoggia dopo il footer senza coprirlo. --spazio-barra serve solo
+   a scroll-padding-bottom, così il focus da tastiera non finisce sotto. */
 
 @media (min-width: 64em) {
   :root {
@@ -594,6 +609,7 @@ body.pagina-semplice {
   text-decoration-thickness: 1px;
   text-underline-offset: 0.25em;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .menu-bottone:hover,
@@ -648,6 +664,7 @@ html:has(.menu-pannello[open]) {
 
 .menu-pannello__barra {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -657,6 +674,7 @@ html:has(.menu-pannello[open]) {
 
 .menu-pannello__corpo {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2.5rem;
   padding-block: 1.5rem 3rem;
 }
@@ -773,10 +791,17 @@ html:has(.menu-pannello[open]) {
   margin-top: auto;
 }
 
+.scheda .foto-segnaposto {
+  padding: 1.25rem;
+}
+
 /* --- 3. Le marche -------------------------------------------------------- */
 
+/* Colonne minmax(0, 1fr): con il testo molto ingrandito il contenuto va a
+   capo invece di allargare la griglia oltre lo schermo */
 .marche {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2.5rem;
 }
 
@@ -786,9 +811,14 @@ html:has(.menu-pannello[open]) {
 
 @media (min-width: 48em) {
   .marche {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: block;
+    columns: 2;
     column-gap: 3rem;
-    align-items: start;
+  }
+
+  .marche__gruppo {
+    break-inside: avoid;
+    padding-bottom: 2.5rem;
   }
 }
 
@@ -810,7 +840,7 @@ html:has(.menu-pannello[open]) {
 
 .servizio {
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr);
+  grid-template-columns: 48px minmax(0, 1fr);
   column-gap: 1rem;
   row-gap: 0.35rem;
   padding-block: 1.5rem;
@@ -837,6 +867,7 @@ html:has(.menu-pannello[open]) {
 
 .beatrice {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
 }
 
@@ -861,6 +892,14 @@ html:has(.menu-pannello[open]) {
 }
 
 /* --- 6. Dicono di noi ---------------------------------------------------- */
+
+/* Da 768 a 1199px la griglia ha 2 colonne: la terza recensione prende
+   tutta la riga, così non resta una cella vuota color filetto */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .recensioni > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
 
 .recensione {
   display: flex;
@@ -891,6 +930,7 @@ html:has(.menu-pannello[open]) {
 
 .dove {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2.5rem;
 }
 
@@ -923,14 +963,17 @@ html:has(.menu-pannello[open]) {
   min-height: 48px;
 }
 
+/* La tabella sborda di 0.5rem per lato: il testo resta sul margine della
+   colonna e la fascia del giorno corrente ha un po' d'aria */
 .orari {
-  width: 100%;
+  width: calc(100% + 1rem);
+  margin-inline: -0.5rem;
   border-collapse: collapse;
   font-variant-numeric: tabular-nums;
 }
 
 .orari caption {
-  padding-bottom: 0.75rem;
+  padding: 0 0.5rem 0.75rem;
   text-align: left;
 }
 
@@ -941,6 +984,7 @@ html:has(.menu-pannello[open]) {
   font-weight: 400;
   text-align: left;
   vertical-align: baseline;
+  overflow-wrap: anywhere;
 }
 
 .orari tr:last-child > * {
@@ -964,7 +1008,7 @@ html:has(.menu-pannello[open]) {
 }
 
 .oggi-etichetta {
-  margin-left: 0.75rem;
+  margin-left: 0.5rem;
 }
 
 .foto-segnaposto--mappa {
@@ -979,6 +1023,7 @@ html:has(.menu-pannello[open]) {
 
 .footer__griglia {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
 }
 
@@ -1021,19 +1066,26 @@ html:has(.menu-pannello[open]) {
 /* --- Barra CTA fissa (solo mobile) --------------------------------------- */
 
 .barra-cta {
-  position: fixed;
-  inset: auto 0 0;
+  position: sticky;
+  bottom: 0;
   z-index: 40;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Due colonne; con il testo molto ingrandito i pulsanti si impilano */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 5.5em), 1fr));
   gap: 0.5rem;
   min-height: var(--spazio-barra);
-  padding: 3px var(--margine) calc(4px + env(safe-area-inset-bottom));
+  padding: 3px max(var(--margine), env(safe-area-inset-right))
+    calc(4px + env(safe-area-inset-bottom)) max(var(--margine), env(safe-area-inset-left));
   border-top: 1px solid var(--filetto);
 }
 
 .barra-cta .btn {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
+}
+
+/* Nella barra lo spazio è 4px: l'anello si avvicina per restare tutto visibile */
+.barra-cta .btn:focus-visible {
+  outline-offset: 1px;
 }
 
 @media (min-width: 64em) {
@@ -1069,9 +1121,24 @@ html:has(.menu-pannello[open]) {
     transform: none;
     transition: none;
   }
+}
 
-  .btn {
+/* --- Stampa -------------------------------------------------------------- */
+
+@media print {
+  .anima .rivela {
+    opacity: 1;
+    transform: none;
     transition: none;
+  }
+
+  .intestazione {
+    position: static;
+  }
+
+  .barra-cta,
+  .menu-bottone {
+    display: none;
   }
 }
 
